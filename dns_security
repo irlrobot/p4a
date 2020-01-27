@@ -1,0 +1,18 @@
+https://www.openresolver.com
+repeat 10 dig @server-ip-address +short +tries=1 +time=1 your-zone.com a
+
+
+https://security.stackexchange.com/questions/36128/why-cant-we-block-dns-amplification-attack-by-blocking-udp-packets-or-dns-respo
+And for legitimate open resolvers, have them send UDP packets as small as possible with the TC bit set ("please retry using TCP") so that amplification doesn't happen yet it doesn't break legitimate traffic.
+
+Other mitigation techniques for resolvers include enforcing a minimum TTL (which also helps against poisoning) and a reasonable maximum payload size for responses sent using UDP. Google DNS are using a 512 bytes limit for this reason.
+
+
+
+https://server-support.co/sysadmin/block-recursive-dns-queries-with-iptables-rate-limiting-rules/
+
+
+
+https://www.fortinet.com/blog/threat-research/10-simple-ways-to-mitigate-dns-based-ddos-attacks.html
+
+
