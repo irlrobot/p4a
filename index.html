@@ -11,7 +11,7 @@
                 44.232.109.120
             </h1>
             <p>
-                Free DNS servers with built-in adblocking power. They are running a pretty vanilla install of <a target="_blank" href="https://pi-hole.net/">Pi-Hole</a> with the default blocklists enabled; the only notable exception is that they are also blocking all .cn and .ru domains. The Query Log is disabled and the software is running in <a target="_blank" href="https://docs.pi-hole.net/ftldns/privacylevels/#level-3-anonymous-mode-anonymize-everything">Anonymous Mode</a>. I respect your privacy and believe everyone else should too.
+                Free DNS servers with built-in adblocking <a target="_blank" href="https://pi-hole.net/">powered by Pi-Hole</a>.
             </p>
             <p>
                 <h3>Frequently Asked Questions</h3>
@@ -25,7 +25,7 @@
                 </p>
                 <p>
                     <b>3. How do I know you aren't logging anything or collecting data?</b><br>
-                    Here is my <a target="_blank" href="privacy.html">privacy policy</a>. You'll have to take my word for it. Eventually, I'd love to undergo regular auditing by a third party.
+                    The Query Log is disabled and the software is running in <a target="_blank" href="https://docs.pi-hole.net/ftldns/privacylevels/#level-3-anonymous-mode-anonymize-everything">Anonymous Mode</a>. I respect your <a target="_blank" href="privacy.html">privacy</a> and believe everyone else should too. You'll have to take my word for it, but eventually I'd love to undergo regular auditing by a third party.
                 </p>
                 <p>
                     <b>4. How do I contact you?</b><br>
@@ -34,19 +34,19 @@
                 <p>
                     <b>5. How do I use this?</b><br>
                     <i>I'll make this better soon...</i><br>
-                    You should do it on your router. I would suggest looking under the DHCP settings on your router and find the setting to modify the DNS servers that are set by DHCP. If you'd like to do it just on your computer: <a target="_blank" href="https://lmgtfy.com/?q=change+dns+server+windows+10&s=d">Windows 10</a> and <a target="_blank" href="https://lmgtfy.com/?q=change+dns+server+macos&s=d">macOS</a>.
+                    You should do it on your router. I would suggest looking under the DHCP settings on your router and find the option to modify the DNS servers that are set by DHCP. If you'd like to do it just on your computer: <a target="_blank" href="https://lmgtfy.com/?q=change+dns+server+windows+10&s=d">Windows 10</a> and <a target="_blank" href="https://lmgtfy.com/?q=change+dns+server+macos&s=d">macOS</a>.
                 </p>
                 <p>
                     <b>6. Does using this mean my internet activity will be anonymous?</b><br>
-                    No. This simply helps block some internet advertising. It will also block all .cn (China) and .ru (Russia) domains. Using these DNS servers does not guarantee your anonyminity of the internet.
+                    No, this simply helps block some internet advertising. It will also block all .cn (China) and .ru (Russia) domains. Using these DNS servers does not guarantee your anonyminity of the internet.
                 </p>
                 <p>
-                    <b>7. What is your upstream DNS provider?</b><br>
-                    <a target="_blank" href="https://1.1.1.1/dns/">CloudFlare - 1.1.1.1</a>
+                    <b>7. What blocklists and blacklists/filters are being used?</b><br>
+                    I am using the default <a target="_blank" href="blocklists.txt">Pi-Hole blocklists</a>. I have added additional <a target="_blank" href="filters.txt">filters</a> that includes common tracking/advertising domains and the entirety of .cn (China) and .ru (Russia). <a href="mailto:josh@p4a.net">Contact me</a> if you have a suggestion, I plan to add an upvote/downvote feature in the future.
                 </p>
                 <p>
                     <b>8. Where are the servers located?</b><br>
-                    In the USA.
+                    In the USA. No plans to expand at this time, sorry.
                 </p>
                 <p>
                     <b>9. Are there any restrictions on queries?</b><br>
