@@ -70,15 +70,6 @@ sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hash
 sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 50/sec --hashlimit-burst 75 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "THROTTLED: "
 
 
-
-## TODO
-one day in the future figure out how to impose a stricter rate limit on IPs that aren't doing NAT
-        i.e. if there are servers or devices directly attached to the internet querying me i want to slow them down because they might be attackers as opposed to an IP doing NAT that is likely a legit network of devices like someones home
-
-
-
-
-
 https://security.stackexchange.com/questions/36128/why-cant-we-block-dns-amplification-attack-by-blocking-udp-packets-or-dns-respo
 And for legitimate open resolvers, have them send UDP packets as small as possible with the TC bit set ("please retry using TCP") so that amplification doesn't happen yet it doesn't break legitimate traffic.
 
