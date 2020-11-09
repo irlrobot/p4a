@@ -1,0 +1,33 @@
+---
+- name: Pihole servers
+  hosts: pihole_dev
+  tasks:
+    - name: Copy iptables rules
+      copy:
+        src: iptables
+        dest: ~/iptables
+        owner: ubuntu
+        group: ubuntu
+        mode: '0664'
+    
+    - name: Copy ip6tables rules
+      copy:
+        src: ip6tables
+        dest: ~/ip6tables
+        owner: ubuntu
+        group: ubuntu
+        mode: '0664'
+
+    - name: Import iptables rules
+      become: yes
+      shell: iptables-restore < /home/ubuntu/iptables
+    
+    - name: Import ip6tables rules
+      become: yes
+      shell: ip6tables-restore < /home/ubuntu/ip6tables
+
+    - name: Install iptables-persistent
+      become: yes
+      apt:
+        pkg: iptables-persistent
+        state: present
