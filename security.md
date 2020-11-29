@@ -1,23 +1,28 @@
-repeat 200 dig @34.212.133.226 +short +tries=1 +time=1 p4a.net a
+# Test queries
+## Rate limiting
+`repeat 200 dig @34.212.133.226 +short +tries=1 +time=1 p4a.net a`
 
-# limits
-https://making.pusher.com/per-ip-rate-limiting-with-iptables/
+## Local unbound tests
+`dig p4a.net @127.0.0.1 -p 5353`
 
-# bad queries
-https://upload.wikimedia.org/wikipedia/commons/3/37/Netfilter-packet-flow.svg
-https://wiki.opennic.org/opennic/tier2security
-https://forums.centos.org/viewtopic.php?t=62148
+`dig sigfail.verteiltesysteme.net @127.0.0.1 -p 5353`
 
-less DNS focused:
-https://javapipe.com/blog/iptables-ddos-protection/
-https://www.hostingfuze.net/ddos-protection-with-iptables/
+`dig sigok.verteiltesysteme.net @127.0.0.1 -p 5353`
 
-sudo apt-get install iptables-persistent
+# Helpful blog posts
+## Bad queries
+* https://upload.wikimedia.org/wikipedia/commons/3/37/Netfilter-packet-flow.svg
+* https://wiki.opennic.org/opennic/tier2security
+* https://forums.centos.org/viewtopic.php?t=62148
 
-sudo iptables -L --line-num
-sudo iptables -L --line-num -t raw
+## iptables
+* https://javapipe.com/blog/iptables-ddos-protection/
+* https://www.hostingfuze.net/ddos-protection-with-iptables/
+* https://making.pusher.com/per-ip-rate-limiting-with-iptables/
+* https://www.quickpacket.com/billing/index.php?rp=/knowledgebase/26/Preventing-Your-DNS-Server-From-Becoming-a-DDoS-Attack-Source.html
 
-sudo iptables --flush -t raw
+# iptables rules
+```
 sudo iptables -t raw -I PREROUTING -p udp -m string --hex-string "|04|ripe|03|net" --algo bm --to 65535 --dport 53 -j DROP
 sudo iptables -t raw -I PREROUTING -p udp -m string --hex-string "|04|ripe|03|net" --algo bm --to 65535 --dport 53 -j LOG --log-prefix "BLOCKED IPv4 ripe.net: "
 sudo iptables -t raw -I PREROUTING -p udp -m string --hex-string "|03|isc|03|org" --algo bm --to 65535 --dport 53 -j DROP
@@ -29,21 +34,15 @@ sudo iptables -t raw -I PREROUTING -p tcp --dport 53 -m string --hex-string "|00
 sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0000FF0001|" --algo bm --from 40 -j DROP
 sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0000FF0001|" --algo bm --from 40 -j LOG --log-prefix "BLOCKED IPv4 UDP ANY: "
 
-
-sudo iptables --flush INPUT
 sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "IPv4 THROTTLED: "
 sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
 sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
 
-sudo iptables --flush OUTPUT
 sudo iptables -A OUTPUT -p icmp -m icmp --icmp-type port-unreachable -j LOG --log-prefix "BLOCKED ICMPPortUnreachable: "
 sudo iptables -A OUTPUT -p icmp -m icmp --icmp-type port-unreachable -j DROP
 
-sudo iptables --flush -t mangle
 sudo iptables-save > iptables_rules
 
-## ipv6
-sudo ip6tables --flush -t raw
 sudo ip6tables -t raw -I PREROUTING -p udp -m string --hex-string "|04|ripe|03|net" --algo bm --to 65535 --dport 53 -j DROP
 sudo ip6tables -t raw -I PREROUTING -p udp -m string --hex-string "|04|ripe|03|net" --algo bm --to 65535 --dport 53 -j LOG --log-prefix "BLOCKED IPv6 ripe.net: "
 sudo ip6tables -t raw -I PREROUTING -p udp -m string --hex-string "|03|isc|03|org" --algo bm --to 65535 --dport 53 -j DROP
@@ -55,27 +54,24 @@ sudo ip6tables -t raw -I PREROUTING -p tcp --dport 53 -m string --hex-string "|0
 sudo ip6tables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0000FF0001|" --algo bm --from 40 -j DROP
 sudo ip6tables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0000FF0001|" --algo bm --from 40 -j LOG --log-prefix "BLOCKED IPv6 UDP ANY: "
 
-
-sudo ip6tables --flush INPUT
 sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "IPv6 THROTTLED: "
 sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
 sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
 
 sudo ip6tables-save > ip6tables_rules
 
-## block a domain
-sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|05|debug|07|opendns|03|com" --algo bm --from 40 -j DROP
+sudo apt-get install iptables-persistent
+sudo iptables -L --line-num
+sudo iptables -L --line-num -t raw
+```
+
+## Block a domain
+```
 sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|05|debug|07|opendns|03|com" --algo bm --from 40 -j LOG --log-prefix "BLOCKED debug.opendns.com: "
+sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|05|debug|07|opendns|03|com" --algo bm --from 40 -j DROP
+```
 
-
-# rate limiting
-https://making.pusher.com/per-ip-rate-limiting-with-iptables/
-https://www.quickpacket.com/billing/index.php?rp=/knowledgebase/26/Preventing-Your-DNS-Server-From-Becoming-a-DDoS-Attack-Source.html
-
-sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 50/sec --hashlimit-burst 75 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
-sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 50/sec --hashlimit-burst 75 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
-sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 50/sec --hashlimit-burst 75 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "THROTTLED: "
-
+# Unorganized random notes
 
 https://security.stackexchange.com/questions/36128/why-cant-we-block-dns-amplification-attack-by-blocking-udp-packets-or-dns-respo
 And for legitimate open resolvers, have them send UDP packets as small as possible with the TC bit set ("please retry using TCP") so that amplification doesn't happen yet it doesn't break legitimate traffic.
