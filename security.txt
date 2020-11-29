@@ -1,5 +1,8 @@
 repeat 200 dig @34.212.133.226 +short +tries=1 +time=1 p4a.net a
 
+# limits
+https://making.pusher.com/per-ip-rate-limiting-with-iptables/
+
 # bad queries
 https://upload.wikimedia.org/wikipedia/commons/3/37/Netfilter-packet-flow.svg
 https://wiki.opennic.org/opennic/tier2security
@@ -27,10 +30,14 @@ sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|00
 sudo iptables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0000FF0001|" --algo bm --from 40 -j LOG --log-prefix "BLOCKED IPv4 UDP ANY: "
 
 
-sudo iptables --flush
-sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
-sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 25/sec --hashlimit-burst 25 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
-sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "IPv4 THROTTLED: "
+sudo iptables --flush INPUT
+sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "IPv4 THROTTLED: "
+sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
+sudo iptables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
+
+sudo iptables --flush OUTPUT
+sudo iptables -A OUTPUT -p icmp -m icmp --icmp-type port-unreachable -j LOG --log-prefix "BLOCKED ICMPPortUnreachable: "
+sudo iptables -A OUTPUT -p icmp -m icmp --icmp-type port-unreachable -j DROP
 
 sudo iptables --flush -t mangle
 sudo iptables-save > iptables_rules
@@ -49,10 +56,10 @@ sudo ip6tables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0
 sudo ip6tables -t raw -I PREROUTING -p udp --dport 53 -m string --hex-string "|0000FF0001|" --algo bm --from 40 -j LOG --log-prefix "BLOCKED IPv6 UDP ANY: "
 
 
-sudo ip6tables --flush
-sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
-sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 25/sec --hashlimit-burst 25 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
-sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "IPv6 THROTTLED: "
+sudo ip6tables --flush INPUT
+sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j LOG --log-prefix "IPv6 THROTTLED: "
+sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j DROP
+sudo ip6tables -i ens5 -A INPUT -p udp -m hashlimit --hashlimit-srcmask 32 --hashlimit-mode srcip --hashlimit-upto 25/sec --hashlimit-burst 50 --hashlimit-name DNSTHROTTLE --dport 53 -j ACCEPT
 
 sudo ip6tables-save > ip6tables_rules
 
