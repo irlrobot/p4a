@@ -19,8 +19,8 @@ COMMIT
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
+-A INPUT -i ens5 -p udp -m hashlimit --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-mode srcip --hashlimit-name DNSTHROTTLE --hashlimit-srcmask 32 -m udp --dport 53 -j LOG --log-prefix "IPv6 THROTTLED: "
 -A INPUT -i ens5 -p udp -m hashlimit --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-mode srcip --hashlimit-name DNSTHROTTLE --hashlimit-srcmask 32 -m udp --dport 53 -j DROP
 -A INPUT -i ens5 -p udp -m hashlimit --hashlimit-upto 25/sec --hashlimit-burst 25 --hashlimit-mode srcip --hashlimit-name DNSTHROTTLE --hashlimit-srcmask 32 -m udp --dport 53 -j ACCEPT
--A INPUT -i ens5 -p udp -m hashlimit --hashlimit-above 25/sec --hashlimit-burst 25 --hashlimit-mode srcip --hashlimit-name DNSTHROTTLE --hashlimit-srcmask 32 -m udp --dport 53 -j LOG --log-prefix "IPv6 THROTTLED: "
 COMMIT
 # Completed on Mon Mar  2 00:57:44 2020
