@@ -4,3 +4,4 @@ https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
 https://gitlab.com/gerowen/old-malware-domains-ad-list/-/raw/master/malwaredomainslist.txt
 https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
 https://www.github.developerdan.com/hosts/lists/amp-hosts-extended.txt
+https://www.github.developerdan.com/hosts/lists/hate-and-junk-extended.txt
