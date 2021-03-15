@@ -1,10 +1,8 @@
-Enabled:
 (^|\.)cn$
 (^|\.)ru$
-^(.+[_.-])?ad[sxv]?[0-9]*[_.-]
+^ad([sxv]?[0-9]*|system)[_.-]([^.[:space:]]+\.){1,}|[_.-]ad([sxv]?[0-9]*|system)[_.-]
 ^(.+[_.-])?adse?rv(er?|ice)?s?[0-9]*[_.-]
 ^(.+[_.-])?telemetry[_.-]
-^(www[0-9]*\.)?xn--
 ^adim(age|g)s?[0-9]*[_.-]
 ^adtrack(er|ing)?[0-9]*[_.-]
 ^advert(s|is(ing|ements?))?[0-9]*[_.-]
@@ -16,6 +14,3 @@ Enabled:
 ^mads\.
 ^pixels?[-.]
 ^stat(s|istics)?[0-9]*[_.-]
-
-Disabled:
-^track(ers?|ing)?[0-9]*[_.-]
